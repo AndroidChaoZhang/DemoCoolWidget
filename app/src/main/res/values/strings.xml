@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DemoCoolWidget</string>
+    <!-- 日历用到的typeface -->
+    <string name="sans_serif" translatable="false">sans-serif</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+</resources>

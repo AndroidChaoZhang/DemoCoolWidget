@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+    <com.zc.democoolwidget.airchina.seat.ScrollViewOritention
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/ll_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="50dp"
+            android:paddingBottom="60dp">
+
+        </LinearLayout>
+    </com.zc.democoolwidget.airchina.seat.ScrollViewOritention>
+
+    <TextView
+        android:id="@+id/tv_test"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/base_line"
+        android:text="dddddddddddddddddddddddddd"/>
+    <TextView
+        android:id="@+id/tv_test_one"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/base_line"
+        android:layout_below="@id/tv_test"
+        android:text="eeeeeeeeeeeeeeee"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_dark"
+        android:visibility="gone"
+        android:padding="8dp">
+        <TextView
+            android:id="@+id/tv_totalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tv_check_in"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:text="btn_checkin_query"
+            android:gravity="center"/>
+
+    </RelativeLayout>
+</RelativeLayout>

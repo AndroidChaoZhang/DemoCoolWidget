@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval" >
+    <solid android:color="#B1000E" />
+    <!-- 边框的颜色 ：不能和窗口背景色一样 -->
+    <stroke
+        android:width="5dp"
+        android:color="#EDCFD1" />
+
+    <corners android:radius="95dp" />
+
+    <size android:width="95dp"
+        android:height="95dp"/>
+</shape>

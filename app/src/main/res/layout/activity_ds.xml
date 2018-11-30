@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:myButton ="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <!-- com.example.total  注意了 是Manifest.xml中的包名   不是自定义view的包名 -->
+<!--     <com.zc.democoolwidget.casetotal.myview.MyView -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_centerHorizontal="true" -->
+<!--         android:layout_centerVertical="true" -->
+<!--          />  -->
+
+<!--     <com.zc.democoolwidget.casetotal.myview.MyButton -->
+<!--         android:layout_width="wrap_content" -->
+<!--         android:layout_height="wrap_content" -->
+<!--         android:layout_centerHorizontal="true" -->
+<!--         android:layout_centerVertical="true" -->
+<!--          />  -->
+<!-- 自定义属性的开关 -->
+    <com.zc.democoolwidget.casetotal.myview.MyButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        
+        myButton:switch_background="@drawable/switch_background"
+        myButton:slide_button="@drawable/slide_button"
+        
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+         /> 
+</RelativeLayout>

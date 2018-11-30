@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!--<com.zc.democoolwidget.casetotal.customer.PaintOneView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<com.zc.democoolwidget.casetotal.customer.PaintTwoView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<com.zc.democoolwidget.casetotal.customer.PathOneView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<com.zc.democoolwidget.casetotal.customer.RadarView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<com.zc.democoolwidget.casetotal.customer.BezierOneView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<com.zc.democoolwidget.casetotal.customer.BezierTwoView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<com.zc.democoolwidget.casetotal.customer.BezierThreeView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<com.zc.democoolwidget.casetotal.customer.PathOverView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <com.zc.democoolwidget.casetotal.customer.PathMeasureView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <!--<com.zc.democoolwidget.casetotal.customer.SearchView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+    <!--<com.zc.democoolwidget.casetotal.customer.SearchLoadingView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
+</RelativeLayout>

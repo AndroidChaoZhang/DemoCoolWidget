@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <ScrollView 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/ll_student_group"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical" >
+
+			<Button
+				android:id="@+id/bt_customer_view"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="自定义View相关内容练习" />
+        
+		    <Button
+		        android:id="@+id/bt_popupWindow"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="用户下拉练习(PopupWindow)" />
+		    <Button
+		        android:id="@+id/bt_rocket"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="小火箭练习" />
+		    <Button
+		        android:id="@+id/bt_definiteSwitch"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="自定义开关练习" />
+		    <Button
+		        android:id="@+id/bt_advert"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="广告滑动练习(viewPager)" />
+		    <Button
+		        android:id="@+id/bt_myViewPage"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="myViewPage练习" />
+		    <Button
+		        android:id="@+id/bt_water"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="水波纹练习" />
+		    <Button
+		        android:id="@+id/bt_loading_view"
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:text="黄色的加载进度条练习" />
+	    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

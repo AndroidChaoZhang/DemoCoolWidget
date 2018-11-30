@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zc.democoolwidget">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name="com.zc.democoolwidget.switchbutton.SwitchButtonActivity"/>
+        <activity android:name="com.zc.democoolwidget.rippleview.RippleViewActivity"/>
+        <activity android:name="com.zc.democoolwidget.calendarview.CalendarActivity"/>
+        <activity android:name="com.zc.democoolwidget.drawerlayout.DrawerLayoutActivity"/>
+
+        <activity android:name="com.zc.democoolwidget.magicindicator.ExampleMainActivity"/>
+        <activity android:name="com.zc.democoolwidget.magicindicator.ScrollableTabExampleActivity"/>
+        <activity android:name="com.zc.democoolwidget.magicindicator.FixedTabExampleActivity"/>
+        <activity android:name="com.zc.democoolwidget.magicindicator.DynamicTabExampleActivity"/>
+        <activity android:name="com.zc.democoolwidget.magicindicator.NoTabOnlyIndicatorExampleActivity"/>
+        <activity android:name="com.zc.democoolwidget.magicindicator.FragmentContainerExampleActivity"/>
+        <activity  android:name="com.zc.democoolwidget.magicindicator.BadgeTabExampleActivity"/>
+        <activity android:name="com.zc.democoolwidget.magicindicator.CustomNavigatorExampleActivity"/>
+        <activity android:name="com.zc.democoolwidget.magicindicator.LoadCustomLayoutExampleActivity"/>
+        <activity android:name="com.zc.democoolwidget.springindicator.SpringIndicatorActivity"/>
+        <activity android:name="com.zc.democoolwidget.imagegaosi.ImageGaosiActivity"/>
+        <activity android:name="com.zc.democoolwidget.water.WaterActivity"/>
+        <activity android:name="com.zc.democoolwidget.recycleview.excelcalendar.BackCalendarActivity"/>
+        <activity android:name="com.zc.democoolwidget.recycleview.lingxing.MainLingXingActivity"/>
+        <activity android:name="com.zc.democoolwidget.casetotal.PwActivity"/>
+        <activity android:name="com.zc.democoolwidget.casetotal.RocketActivity"/>
+        <activity android:name="com.zc.democoolwidget.casetotal.MyActivity"/>
+        <activity android:name="com.zc.democoolwidget.casetotal.AdvertActivity"/>
+        <activity android:name="com.zc.democoolwidget.casetotal.MyViewPageActivity"  android:hardwareAccelerated="false"/>
+        <activity android:name="com.zc.democoolwidget.airchina.seat.AirChinaSeatActivity"/>
+        <activity android:name="com.zc.democoolwidget.casetotal.WaterActivity"/>
+        <activity android:name="com.zc.democoolwidget.casetotal.MainCaseTotalActivity"/>
+        <activity android:name="com.zc.democoolwidget.casetotal.customer.CanvasViewActivity"  android:hardwareAccelerated="false"/>
+        <activity android:name="com.zc.democoolwidget.casetotal.loadingview.LoadingViewActivity"/>
+        <activity android:name="com.zc.democoolwidget.rxjava2.RxJava2Activity"/>
+    </application>
+
+</manifest>
