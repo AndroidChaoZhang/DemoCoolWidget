@@ -11,7 +11,6 @@ import android.widget.ListView;
 import com.zc.democoolwidget.airchina.seat.AirChinaSeatActivity;
 import com.zc.democoolwidget.calendarview.CalendarActivity;
 import com.zc.democoolwidget.casetotal.MainCaseTotalActivity;
-import com.zc.democoolwidget.drawerlayout.DrawerLayoutActivity;
 import com.zc.democoolwidget.imagegaosi.ImageGaosiActivity;
 import com.zc.democoolwidget.magicindicator.ExampleMainActivity;
 import com.zc.democoolwidget.recycleview.excelcalendar.BackCalendarActivity;
@@ -25,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    private List<String> dataList = new ArrayList<>(Arrays.asList("0.自定义类似的ToggButton(动画)", "1.点击涟漪动画RippleView", "2.类似Airchina的日期控件","3.Drawerlayout左侧菜单滑出炫动"
+    private List<String> dataList = new ArrayList<>(Arrays.asList("0.自定义类似的ToggButton(动画)", "1.点击涟漪动画RippleView", "2.类似Airchina的日期控件","3.Drawerlayout左侧菜单滑出炫动（Deleted）"
             ,"4.magicindicator滚动的viewPager GroupButton","5.水滴viewpager可爱骷髅头","6.高斯模糊图片","7.签到水波纹扩散动画",
             "8.国航往返日历excel以及菱形案例","9.总结案例","10.国航的飞机座位图","11.RxJava2的学习"));
 
@@ -54,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivity(new Intent(this,CalendarActivity.class));
                 break;
             case 3:
-                startActivity(new Intent(this,DrawerLayoutActivity.class));
+//                startActivity(new Intent(this,DrawerLayoutActivity.class));
                 break;
             case 4:
                 startActivity(new Intent(this,ExampleMainActivity.class));
