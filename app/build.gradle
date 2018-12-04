@@ -12,12 +12,28 @@ android {
         ndk {
             abiFilters "armeabi", "armeabi-v7a"
         }
+//        externalNativeBuild {
+//            cmake {
+//                cppFlags ""
+//                abiFilters 'armeabi', 'armeabi-v7a'
+//            }
+//        }
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
         checkReleaseBuilds false// 防止在发布的时候出现因MissingTranslation导致Build Failed!
         abortOnError false//编译时屏蔽掉lint检查，可以避免由于编译条件太过严格而编译不过的问题
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+//    externalNativeBuild {
+//        cmake {
+//            path "CMakeLists.txt"
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled false
