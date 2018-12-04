@@ -4,14 +4,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-     <com.zc.democoolwidget.casetotal.myview.SeatView
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"/>
      <!--<com.zc.democoolwidget.casetotal.myview.MyRingTwo-->
          <!--android:layout_width="match_parent"-->
          <!--android:layout_height="200dp"/>-->
-    <!--<com.zc.democoolwidget.casetotal.myview.MyRingThree-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="200dp"/>-->
+    <com.zc.democoolwidget.casetotal.myview.MyRingThree
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
