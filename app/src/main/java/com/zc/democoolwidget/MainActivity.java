@@ -52,9 +52,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             case 2:
                 startActivity(new Intent(this,CalendarActivity.class));
                 break;
-            case 3:
-//                startActivity(new Intent(this,DrawerLayoutActivity.class));
-                break;
             case 4:
                 startActivity(new Intent(this,ExampleMainActivity.class));
                 break;

@@ -3,9 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingTop="30dp"
     tools:context=".MainActivity" >
+
     <com.zc.democoolwidget.airchina.seat.ScrollViewOritention
         android:id="@+id/scroll_view"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -19,42 +22,107 @@
         </LinearLayout>
     </com.zc.democoolwidget.airchina.seat.ScrollViewOritention>
 
-    <TextView
-        android:id="@+id/tv_test"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/base_line"
-        android:text="dddddddddddddddddddddddddd"/>
-    <TextView
-        android:id="@+id/tv_test_one"
+    <RadioGroup
+        android:id="@+id/rg_person_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/base_line"
-        android:layout_below="@id/tv_test"
-        android:text="eeeeeeeeeeeeeeee"/>
+        android:orientation="horizontal"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:paddingBottom="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+        <RadioButton
+            android:id="@+id/rb_person0"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:button="@drawable/selector_person_selected"
+            android:checked="true"
+            android:paddingLeft="5dp"
+            android:textSize="14sp"
+            android:text="张三"
+            android:lines="2"
+            android:ellipsize="end"/>
+        <RadioButton
+            android:id="@+id/rb_person1"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:button="@drawable/selector_person_selected"
+            android:textSize="14sp"
+            android:lines="2"
+            android:text="李四"
+            android:ellipsize="end"
+            android:paddingLeft="5dp" />
+        <RadioButton
+            android:id="@+id/rb_person2"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:button="@drawable/selector_person_selected"
+            android:textSize="14sp"
+            android:lines="2"
+            android:text="王五"
+            android:ellipsize="end"
+            android:paddingLeft="5dp"/>
+        <RadioButton
+            android:id="@+id/rb_person3"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:button="@drawable/selector_person_selected"
+            android:textSize="14sp"
+            android:lines="2"
+            android:text="张六"
+            android:ellipsize="end"
+            android:paddingLeft="5dp"/>
+    </RadioGroup>
 
-    <RelativeLayout
-        android:id="@+id/rl_bottom"
-        android:layout_width="fill_parent"
+    <RadioGroup
+        android:id="@+id/rg_upper_lower"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/rg_person_row"
+        android:background="@drawable/shape_flightseat_radiogroup"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_upper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/shape_flightseat_radiobutton_left"
+            android:button="@null"
+            android:checked="true"
+            android:gravity="center"
+            android:text="上层"
+            android:textColor="@color/select_flightseat_color" />
+
+        <RadioButton
+            android:id="@+id/rb_lower"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/shape_flightseat_radiobutton_right"
+            android:button="@null"
+            android:gravity="center"
+            android:text="下层"
+            android:textColor="@color/select_flightseat_color" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tv_seatinfo"
+        android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:background="@color/common_dark"
+        android:text="选中的座位"
+        android:gravity="center"
         android:visibility="gone"
-        android:padding="8dp">
-        <TextView
-            android:id="@+id/tv_totalPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
-        <TextView
-            android:id="@+id/tv_check_in"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:layout_centerInParent="true"
-            android:text="btn_checkin_query"
-            android:gravity="center"/>
-
-    </RelativeLayout>
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 </RelativeLayout>

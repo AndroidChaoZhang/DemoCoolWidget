@@ -22,8 +22,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by NEU on 2018/5/3.
@@ -52,7 +50,7 @@ public class FlightAirChinaSeatViewCanvas extends View {
     private static final float SEAT_HOW_HOW_LENGTH = 6;
     /**可选的座位*/
     private Map<String, RectF> mSeats = new HashMap<>();
-    /**选中座位  size有且仅是1*/
+    /**选中座位  通过选择的乘机人position存储*/
     private List<String> mSeatSelecting = new ArrayList<>();
     /**预选座位*/
     private List<String> bookSeatNoList = new ArrayList<>();
@@ -60,9 +58,7 @@ public class FlightAirChinaSeatViewCanvas extends View {
     private List<String> mSeatSelected = new ArrayList<>();
 
     /**每一行的合并单元个数*/
-    private int leftAllIndex = 0;
-    /**紧急出口的bitmap*/
-    private Bitmap mBitmap_EXIT = null;
+    private float leftAllIndex = 0;
     /**图片的所有集合  集合的key  通过图片名+大小命名  做个缓存*/
     private Map<String,Object> bitmapAllInfo = new HashMap<>();
     /**view的宽度*/
@@ -81,11 +77,16 @@ public class FlightAirChinaSeatViewCanvas extends View {
     private float paddingLeftRightSeat = 0;
     /**飞机头的大小 根据屏幕宽度来适配*/
     private int start_position_y = 0;
-
-    public FlightAirChinaSeatViewCanvas(Activity context, List<Map<String,Object>> seatList, List<String> bookingSeatList) {
+    /**是否可取消座位*/
+    private boolean isCanCancelSeat = false;
+    /**  所有值机大空间座位信息*/
+    public Map<String,Object> big_space_seat;
+    public FlightAirChinaSeatViewCanvas(Activity context, List<Map<String,Object>> seatList, List<String> bookingSeatList, boolean isCanCancelSeat) {
         super(context);
         this.seatList = seatList;
+        big_space_seat=new HashMap<>();
         bookSeatNoList = bookingSeatList;
+        this.isCanCancelSeat = isCanCancelSeat;
         mSeatSelecting.addAll(bookingSeatList);
         if (mSeatSelecting.size()==0) {//没有选中的  默认选中""
             mSeatSelecting.add("");
@@ -249,7 +250,8 @@ public class FlightAirChinaSeatViewCanvas extends View {
                         );
                     } else {
                         if ("$".equals(optional)) {//大空间座位
-                            canvas.drawBitmap(getBigBitmap(seatWH, priceLevel, seatType),
+                            big_space_seat.put(seatNO,seatMapInfo);
+                            canvas.drawBitmap(getBigBitmap(seatWH, MapUtils.getObject(seatMapInfo.get("seatColor")), seatType),
                                     left,
                                     top,
                                     mPaintBitmap
@@ -294,9 +296,13 @@ public class FlightAirChinaSeatViewCanvas extends View {
         String optional = MapUtils.getObject(seatMapInfo.get("optional"));
 
         if (!"=".equals(optional) && !TextUtils.isEmpty(optional)) {//过道
-            int laGaLength = 1;
+            float laGaLength = 1;
             try {
-                laGaLength = Integer.parseInt(getNumberString(optional));
+                if (optional.contains(".")) {
+                    laGaLength = Float.parseFloat(getNumberString(optional));
+                } else {
+                    laGaLength = Integer.parseInt(getNumberString(optional));
+                }
             }catch (Exception e){}
             leftAllIndex =  leftAllIndex + laGaLength -1;
             RectF rectFLAGA = new RectF(left, top, left + laGaLength*seatWH  + (laGaLength-1)*seatWH/SEAT_HOW_HOW_LENGTH, top + seatWH);
@@ -314,9 +320,8 @@ public class FlightAirChinaSeatViewCanvas extends View {
     }
 
     private String getNumberString (String matcher) {
-        Pattern p = Pattern.compile("[^0-9]");
-        Matcher m = p.matcher(matcher);
-        return m.replaceAll("");
+        matcher = matcher.replaceAll("[a-zA-Z]","" );
+        return matcher;
     }
     /**上个舱位的最后坐标*/
     private float lastIndexPosition = 540;
@@ -354,6 +359,7 @@ public class FlightAirChinaSeatViewCanvas extends View {
             for (int i = 0; i < rowsList.size(); i++) {//行
                 Map<String, Object> rowsMapInfo = rowsList.get(i);
                 String wingFlag = MapUtils.getObject(rowsMapInfo.get("wingFlag"));
+                String des = "";//是否向下移动半个位置的标识符
                 List<Map<String,Object>> rowList = (List<Map<String, Object>>) rowsMapInfo.get("row");
                 if (null!=rowList && rowList.size()>0) {
                     String rownum = MapUtils.getObject(rowsMapInfo.get("rownum"));
@@ -365,7 +371,7 @@ public class FlightAirChinaSeatViewCanvas extends View {
                                 || optional.contains("ST")) {//厕所餐食 宝宝摇篮 楼梯
                             setWCFood(i, j, canvas, seatWH, rowMapInfo);
                         } else {
-                            String colstring = cols.substring(j+leftAllIndex, j +leftAllIndex+ 1);
+                            String colstring = cols.substring(j+(int)leftAllIndex, j +(int)leftAllIndex+ 1);
                             rowMapInfo.put("colTitle",colstring);
                             rowMapInfo.put("rownum",rownum);
                             rowMapInfo.put("seatType",MapUtils.getObject(rowsMapInfo.get("seatType")));
@@ -374,6 +380,11 @@ public class FlightAirChinaSeatViewCanvas extends View {
                             if (j+1==rowList.size()) {//座位第一排显示
                                 isShowColTitle = false;
                             }
+
+                            String desInfo = MapUtils.getObject(rowMapInfo.get("des"));//0：代表正常显示 1：代表延后半行显示
+                            if ("1".equals(desInfo) && TextUtils.isEmpty(des)) {//1：代表延后半行显示
+                                des = desInfo;
+                            }
                         }
                     }
                 }
@@ -381,15 +392,18 @@ public class FlightAirChinaSeatViewCanvas extends View {
                 //这里是画机翅膀逻辑
                 if ("1".equals(wingFlag)) {//1： 机翼开始
                     float indexPosition = i * (seatWH + dip2px(16)) + 1*seatWH + lastIndexPosition;
+                    if ("1".equals(des)) {//1：代表延后半行显示
+                        indexPosition = indexPosition + seatWH / 2;
+                    }
 
                     //左边的 机翅之前
                     canvas.drawLine(paddingLeftRightBig,start_position_y,paddingLeftRightBig,indexPosition+dip2px(5),mPaintBigLine);
-                    canvas.drawLine(paddingLeftRightBig,indexPosition+dip2px(5),0,indexPosition + seatWH/2+dip2px(10),mPaintBigLine);
+                    canvas.drawLine(paddingLeftRightBig,indexPosition+dip2px(5),0,indexPosition + seatWH/2+dip2px(8),mPaintBigLine);
                     canvas.drawLine(paddingLeftRight,start_position_y,paddingLeftRight,indexPosition,mPaintLine);
                     canvas.drawLine(paddingLeftRight,indexPosition,0,indexPosition + seatWH/2,mPaintLine);
                     //右边的 机翅之前
                     canvas.drawLine(viewWidth -paddingLeftRightBig,start_position_y,viewWidth -paddingLeftRightBig,indexPosition+dip2px(5),mPaintBigLine);
-                    canvas.drawLine(viewWidth -paddingLeftRightBig,indexPosition+dip2px(5),viewWidth,indexPosition + seatWH/2+dip2px(10),mPaintBigLine);
+                    canvas.drawLine(viewWidth -paddingLeftRightBig,indexPosition+dip2px(5),viewWidth,indexPosition + seatWH/2+dip2px(8),mPaintBigLine);
                     canvas.drawLine(viewWidth -paddingLeftRight,start_position_y,viewWidth -paddingLeftRight,indexPosition,mPaintLine);
                     canvas.drawLine(viewWidth -paddingLeftRight,indexPosition,viewWidth,indexPosition + seatWH/2,mPaintLine);
 
@@ -397,6 +411,9 @@ public class FlightAirChinaSeatViewCanvas extends View {
                     canvas.drawCircle(viewWidth - paddingLeftRightBig + 2,indexPosition+dip2px(5),1,mPaintBigLine);
                 } else if ("3".equals(wingFlag)) {//3： 机翼结束
                     wingFlagEndPositionY = i * (seatWH + dip2px(16)) + 2*seatWH + lastIndexPosition;
+                    if ("1".equals(des)) {//1：代表延后半行显示
+                        wingFlagEndPositionY = wingFlagEndPositionY + seatWH / 2;
+                    }
 
                     canvas.drawLine(0, wingFlagEndPositionY + seatWH/2,paddingLeftRightBig,wingFlagEndPositionY,mPaintBigLine);
                     canvas.drawLine(viewWidth, wingFlagEndPositionY + seatWH/2,viewWidth - paddingLeftRightBig,wingFlagEndPositionY,mPaintBigLine);
@@ -515,7 +532,7 @@ public class FlightAirChinaSeatViewCanvas extends View {
                 Bitmap mBitmapFirstSeatNormal = (Bitmap) bitmapAllInfo.get("icon_seat_yellow" + width);
                 if (mBitmapFirstSeatNormal == null) {
                     mBitmapFirstSeatNormal = setBitmapSize(R.drawable.icon_seat_yellow, width);
-                    bitmapAllInfo.put("icon_seat_yellow" + width,mBitmap_EXIT);
+                    bitmapAllInfo.put("icon_seat_yellow" + width,mBitmapFirstSeatNormal);
                 }
                 return mBitmapFirstSeatNormal;
             } else if (type == SeatState.Selected) {
@@ -597,53 +614,50 @@ public class FlightAirChinaSeatViewCanvas extends View {
         }
     }
     /**值机大空间座位图标*/
-    private Bitmap getBigBitmap (float width, String priceLevel ,String type) {
-        if ("1".equals(type)) {//1：头等公务类型座椅
-            if ("A".equals(priceLevel) || "B".equals(priceLevel) || "Y".equals(priceLevel)) { //红色座位
-                Bitmap mBitmapFirstSeatRed = (Bitmap) bitmapAllInfo.get("icon_seat_red" + width);
-                if (mBitmapFirstSeatRed == null) {
-                    mBitmapFirstSeatRed = setBitmapSize(R.drawable.icon_meal, width);
-                    bitmapAllInfo.put("icon_seat_red" + width,mBitmapFirstSeatRed);
-                }
-                return mBitmapFirstSeatRed;
-            } else if ("C".equals(priceLevel)) { //绿色座位
-                Bitmap mBitmapFirstSeatGreen = (Bitmap) bitmapAllInfo.get("icon_seat_green" + width);
-                if (mBitmapFirstSeatGreen == null) {
-                    mBitmapFirstSeatGreen = setBitmapSize(R.drawable.icon_meal, width);
-                    bitmapAllInfo.put("icon_seat_green" + width,mBitmapFirstSeatGreen);
-                }
-                return mBitmapFirstSeatGreen;
-            } else if ("D".equals(priceLevel)) {    //蓝色座位
-                Bitmap mBitmapFirstSeatBlue = (Bitmap) bitmapAllInfo.get("icon_seat_blue_air" + width);
-                if (mBitmapFirstSeatBlue == null) {
-                    mBitmapFirstSeatBlue = setBitmapSize(R.drawable.icon_meal, width);
-                    bitmapAllInfo.put("icon_seat_blue_air" + width,mBitmapFirstSeatBlue);
-                }
-                return mBitmapFirstSeatBlue;
+    private Bitmap getBigBitmap (float width, String seatColor ,String type) {
+
+        if ("RED".equals(seatColor)) { //红色座位
+            Bitmap mBitmapSeatRed = (Bitmap) bitmapAllInfo.get("icon_rect_red" + width);
+            if (mBitmapSeatRed == null) {
+                mBitmapSeatRed = setBitmapSize(R.drawable.icon_rect_red, width);
+                bitmapAllInfo.put("icon_rect_red" + width,mBitmapSeatRed);
             }
-        } else {
-            if ("A".equals(priceLevel) || "B".equals(priceLevel) || "Y".equals(priceLevel)) { //红色座位
-                Bitmap mBitmapSeatRed = (Bitmap) bitmapAllInfo.get("icon_rect_red" + width);
-                if (mBitmapSeatRed == null) {
-                    mBitmapSeatRed = setBitmapSize(R.drawable.icon_meal, width);
-                    bitmapAllInfo.put("icon_rect_red" + width,mBitmapSeatRed);
-                }
-                return mBitmapSeatRed;
-            } else if ("C".equals(priceLevel)) { //绿色座位
-                Bitmap mBitmapSeatGreen = (Bitmap) bitmapAllInfo.get("icon_rect_green" + width);
-                if (mBitmapSeatGreen == null) {
-                    mBitmapSeatGreen = setBitmapSize(R.drawable.icon_meal, width);
-                    bitmapAllInfo.put("icon_rect_green" + width,mBitmapSeatGreen);
-                }
-                return mBitmapSeatGreen;
-            } else if ("D".equals(priceLevel)) {    //蓝色座位
-                Bitmap mBitmapSeatBlue = (Bitmap) bitmapAllInfo.get("icon_rect_blue_air" + width);
-                if (mBitmapSeatBlue == null) {
-                    mBitmapSeatBlue = setBitmapSize(R.drawable.icon_meal, width);
-                    bitmapAllInfo.put("icon_rect_blue_air" + width,mBitmapSeatBlue);
-                }
-                return mBitmapSeatBlue;
+            return mBitmapSeatRed;
+        } else if ("GREEN".equals(seatColor)) { //绿色座位
+            Bitmap mBitmapSeatGreen = (Bitmap) bitmapAllInfo.get("icon_rect_green" + width);
+            if (mBitmapSeatGreen == null) {
+                mBitmapSeatGreen = setBitmapSize(R.drawable.icon_rect_green, width);
+                bitmapAllInfo.put("icon_rect_green" + width,mBitmapSeatGreen);
             }
+            return mBitmapSeatGreen;
+        } else if ("BLUE_LESS".equals(seatColor)) {    //蓝色座位
+            Bitmap mBitmapSeatBlue = (Bitmap) bitmapAllInfo.get("icon_rect_blue_air" + width);
+            if (mBitmapSeatBlue == null) {
+                mBitmapSeatBlue = setBitmapSize(R.drawable.icon_rect_blue_air, width);
+                bitmapAllInfo.put("icon_rect_blue_air" + width,mBitmapSeatBlue);
+            }
+            return mBitmapSeatBlue;
+        }else if ("PURPLE".equals(seatColor)) {    //紫色座位
+            Bitmap mBitmapSeatBlue = (Bitmap) bitmapAllInfo.get("icon_pruple_seat_new_seat_s" + width);
+            if (mBitmapSeatBlue == null) {
+                mBitmapSeatBlue = setBitmapSize(R.drawable.icon_rect_blue_air, width);
+                bitmapAllInfo.put("icon_pruple_seat_new_seat_s" + width,mBitmapSeatBlue);
+            }
+            return mBitmapSeatBlue;
+        }else if ("LAKE_BLUE".equals(seatColor)) {    //浅蓝色座位
+            Bitmap mBitmapSeatBlue = (Bitmap) bitmapAllInfo.get("icon_blue_less_seat_new_seat_s" + width);
+            if (mBitmapSeatBlue == null) {
+                mBitmapSeatBlue = setBitmapSize(R.drawable.icon_rect_blue_air, width);
+                bitmapAllInfo.put("icon_blue_less_seat_new_seat_s" + width,mBitmapSeatBlue);
+            }
+            return mBitmapSeatBlue;
+        }else if ("GREEN_LESS".equals(seatColor)) {    //浅绿色座位
+            Bitmap mBitmapSeatBlue = (Bitmap) bitmapAllInfo.get("icon_rect_green_less_s" + width);
+            if (mBitmapSeatBlue == null) {
+                mBitmapSeatBlue = setBitmapSize(R.drawable.icon_rect_green_less_s, width);
+                bitmapAllInfo.put("icon_rect_green_less_s" + width,mBitmapSeatBlue);
+            }
+            return mBitmapSeatBlue;
         }
         return null;
     }
@@ -680,6 +694,12 @@ public class FlightAirChinaSeatViewCanvas extends View {
                                 listener.onSeatChange(mSeatSelecting);
                                 postInvalidate();
                             }
+                        } else {
+                            if (mSeatSelecting.size() > indexCurrentPerson && isCanCancelSeat) {//可取消座位
+                                mSeatSelecting.set(indexCurrentPerson,"");
+                                listener.onSeatChange(mSeatSelecting);
+                                postInvalidate();
+                            }
                         }
                     }
                 }
@@ -711,6 +731,29 @@ public class FlightAirChinaSeatViewCanvas extends View {
         }
     }
 
+    public String getBigSpaceSeatPrice(String seatNo){
+        if(TextUtils.isEmpty(seatNo))
+            return "0";
+        Object mapInfo = big_space_seat.get(seatNo);
+        if(mapInfo==null)
+            return "0";
+
+        String price=MapUtils.getObject(((Map<String,Object>)mapInfo).get("price"));
+        if(TextUtils.isEmpty(price))
+            return "0";
+        return price;
+    }
+
+    public Map<String,Object> getBigSpackMap(String seatNo){
+        if(TextUtils.isEmpty(seatNo))
+            return null;
+        Object mapInfo = big_space_seat.get(seatNo);
+        if(mapInfo==null)
+            return null;
+        return (Map<String,Object>)mapInfo;
+    }
+
+
     /**值机换座页面的退回预选座位*/
     public void setSelectingSeat (String seatNo) {
         mSeatSelecting.clear();
@@ -719,13 +762,17 @@ public class FlightAirChinaSeatViewCanvas extends View {
     }
     /**清除选中的座位*/
     public void clearSelectingSeat () {
-        if (mSeatSelecting.size()>=1) {
-            mSeatSelecting.set(0,"");
+        if (mSeatSelecting.size()> indexCurrentPerson) {//清除所选乘机人的座位信息
+            mSeatSelecting.set(indexCurrentPerson,"");
         }
     }
 
     public void setIndexCurrentPerson (int position) {
         this.indexCurrentPerson = position;
+    }
+
+    public int getIndexCurrentPerson () {
+        return indexCurrentPerson ;
     }
 
     private SeatChangeListener listener;
