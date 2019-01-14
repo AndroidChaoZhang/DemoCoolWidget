@@ -136,6 +136,7 @@ public class FlightAirChinaSeatViewCanvas extends View {
         mPaintBigLine.setAntiAlias(true);
         mPaintBigLine.setStrokeWidth(dip2px(4));
         mPaintBigLine.setStyle(Paint.Style.STROKE);
+        mPaintBigLine.setStrokeCap(Paint.Cap.ROUND);
 
         mPaintLine = new Paint();
         mPaintLine.setColor(Color.GRAY);
@@ -407,8 +408,6 @@ public class FlightAirChinaSeatViewCanvas extends View {
                     canvas.drawLine(viewWidth -paddingLeftRight,start_position_y,viewWidth -paddingLeftRight,indexPosition,mPaintLine);
                     canvas.drawLine(viewWidth -paddingLeftRight,indexPosition,viewWidth,indexPosition + seatWH/2,mPaintLine);
 
-                    canvas.drawCircle(paddingLeftRightBig - 2,indexPosition+dip2px(5),1,mPaintBigLine);
-                    canvas.drawCircle(viewWidth - paddingLeftRightBig + 2,indexPosition+dip2px(5),1,mPaintBigLine);
                 } else if ("3".equals(wingFlag)) {//3： 机翼结束
                     wingFlagEndPositionY = i * (seatWH + dip2px(16)) + 2*seatWH + lastIndexPosition;
                     if ("1".equals(des)) {//1：代表延后半行显示
@@ -420,8 +419,6 @@ public class FlightAirChinaSeatViewCanvas extends View {
                     canvas.drawLine(0,wingFlagEndPositionY + seatWH/2 + dip2px(8),paddingLeftRight,wingFlagEndPositionY+ dip2px(10),mPaintLine);
                     canvas.drawLine(viewWidth,wingFlagEndPositionY + seatWH/2+ dip2px(8),viewWidth -paddingLeftRight,wingFlagEndPositionY+ dip2px(10),mPaintLine);
 
-                    canvas.drawCircle(paddingLeftRightBig - 1,wingFlagEndPositionY +1 ,1,mPaintBigLine);
-                    canvas.drawCircle(viewWidth - paddingLeftRightBig + 1,wingFlagEndPositionY +1 ,1,mPaintBigLine);
                 }
 
                 boolean isLastIndex = false;
