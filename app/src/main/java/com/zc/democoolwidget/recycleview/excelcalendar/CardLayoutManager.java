@@ -26,17 +26,23 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
             public Rect get() { return new Rect();}
         });
     }
-
+    /**这个方法就是RecyclerView Item的布局参数，若是想修改子Item的布局参数（比如：宽/高/margin/padding等等），那么可以在该方法内进行设置。
+     */
     @Override
     public RecyclerView.LayoutParams generateDefaultLayoutParams() {//这是一个必须重写的方法，这个方法是给RecyclerView的子View创建一个默认的LayoutParams
         return new RecyclerView.LayoutParams(itemWidth,itemWidth);
     }
 
+    /** 重写这个函数来布局RecyclerView当前需要显示的item,确定每个item的位置 */
     @Override
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {//这个方法显然是用于放置子view的位置，十分重要的一个方法
-        if (getItemCount() <= 0 || state.isPreLayout()) { return;}
-
-        detachAndScrapAttachedViews(recycler);// 分离所有的itemView，detach轻量回收所有View
+        if (getItemCount() == 0) {//没有Item，界面空着吧
+            return;
+        } else if (getChildCount() == 0 && state.isPreLayout()) {//state.isPreLayout()是支持动画的
+            return;
+        }
+        //在布局之前，将所有的子view先detach掉，放入到Scrap中
+        detachAndScrapAttachedViews(recycler);
         //detachView(view);//超级轻量回收一个View,马上就要添加回来
         //detachAndScrapView(view, recycler);//detach轻量回收指定View
         //attachView(view);//将上个方法detach的View attach回来
@@ -44,11 +50,11 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
         // recycle真的回收一个View ，该View再次回来需要执行onBindViewHolder方法
 //        removeAndRecycleView(View child, Recycler recycler);
 //        removeAndRecycleAllViews(Recycler recycler);
-
+/** * 根据Adapter的位置position找RecyclerView中对应的item * 我们不管它是从scrap里取，还是从RecyclerViewPool里取，亦或是onCreateViewHolder里拿 * 系统已经帮我们处理好了缓存了 */
         View first = recycler.getViewForPosition(0);// 根据position获取一个碎片view，可以从回收的view中获取，也可能新构造一个
         measureChildWithMargins(first, 0, 0);// 计算此碎片view包含边距的尺寸，测量View,这个方法会考虑到View的ItemDecoration以及Margin
         int itemWidth = getDecoratedMeasuredWidth(first);// 获取此碎片view包含边距和装饰的宽度width
-        int itemHeight = getDecoratedMeasuredHeight(first);
+        int itemHeight = itemWidth;
 
         for (int i = 0; i < getItemCount(); i++) {
             Rect item = mItemFrames.get(i);
@@ -72,18 +78,19 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
 
         for (int i = 0; i < getItemCount(); i++) {
             Rect frame = mItemFrames.get(i);
-            if (Rect.intersects(displayRect, frame)) {
+            if (Rect.intersects(displayRect, frame)) {//判断a,b两矩形是否相交 //Item没有在显示区域，就说明需要回收
                 View scrap = recycler.getViewForPosition(i);
                 addView(scrap);
                 measureChildWithMargins(scrap, 0, 0);
+                // Important！将ViewLayout出来，显示在屏幕上，布局到RecyclerView容器中，所有的计算都是为了得出任意position的item的边界来布局
                 layoutDecorated(scrap, frame.left - mHorizontalOffset, frame.top - mVerticalOffset,
-                        frame.right - mHorizontalOffset, frame.bottom - mVerticalOffset);// Important！将ViewLayout出来，显示在屏幕上，布局到RecyclerView容器中，所有的计算都是为了得出任意position的item的边界来布局
+                        frame.right - mHorizontalOffset, frame.bottom - mVerticalOffset);
             }
         }
     }
 
     @Override
-    public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
+    public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {//dy>0:向上滚动  dy<0:向下滚动
         detachAndScrapAttachedViews(recycler);
         if (mVerticalOffset + dy < 0) {
             dy = -mVerticalOffset;
