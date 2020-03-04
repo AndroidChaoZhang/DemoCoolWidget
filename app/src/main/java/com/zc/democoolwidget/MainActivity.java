@@ -13,7 +13,7 @@ import com.zc.democoolwidget.calendarview.CalendarActivity;
 import com.zc.democoolwidget.casetotal.MainCaseTotalActivity;
 import com.zc.democoolwidget.imagegaosi.ImageGaosiActivity;
 import com.zc.democoolwidget.magicindicator.ExampleMainActivity;
-import com.zc.democoolwidget.recycleview.excelcalendar.BackCalendarActivity;
+import com.zc.democoolwidget.recycleview.RecycleMainActivity;
 import com.zc.democoolwidget.rippleview.RippleViewActivity;
 import com.zc.democoolwidget.springindicator.SpringIndicatorActivity;
 import com.zc.democoolwidget.switchbutton.SwitchButtonActivity;
@@ -21,7 +21,9 @@ import com.zc.democoolwidget.water.WaterActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     private List<String> dataList = new ArrayList<>(Arrays.asList("0.自定义类似的ToggButton(动画)", "1.点击涟漪动画RippleView", "2.类似Airchina的日期控件","3.Drawerlayout左侧菜单滑出炫动（Deleted）"
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataList);
         lv_main.setAdapter(adapter);
         lv_main.setOnItemClickListener(this);
+
+        Map<String,Object> map = new HashMap(20);
     }
 
 
@@ -65,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivity(new Intent(this,WaterActivity.class));
                 break;
             case 8:
-                startActivity(new Intent(this,BackCalendarActivity.class));
+                RecycleMainActivity.startSimpleLayout(this);
                 break;
             case 9:
                 startActivity(new Intent(this,MainCaseTotalActivity.class));

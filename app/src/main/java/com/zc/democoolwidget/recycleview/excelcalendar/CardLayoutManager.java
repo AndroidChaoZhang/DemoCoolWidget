@@ -33,15 +33,22 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
         return new RecyclerView.LayoutParams(itemWidth,itemWidth);
     }
 
-    /** 重写这个函数来布局RecyclerView当前需要显示的item,确定每个item的位置 */
+    /** 重写这个函数来布局RecyclerView当前需要显示的item,确定每个item的位置
+     * 1.进行布局之前，我们需要调用detachAndScrapAttachedViews方法把屏幕中的Items都分离出来，内部调整好位置和数据后，再把它添加回去(如果需要的话)；
+     * 2.分离了之后，我们就要想办法把它们再添加回去了，所以需要通过addView方法来添加，那这些View在哪里得到呢？ 我们需要调用 Recycler的getViewForPosition(int position) 方法来获取；
+     * 3.获取到Item并重新添加了之后，我们还需要对它进行测量，这时候可以调用measureChild或measureChildWithMargins方法，两者的区别我们已经了解过了，相信同学们都能根据需求选择更合适的方法；
+     * 4.在测量完还需要做什么呢？ 没错，就是布局了，我们也是根据需求来决定使用layoutDecorated还是layoutDecoratedWithMargins方法；
+     * 5.在自定义ViewGroup中，layout完就可以运行看效果了，但在LayoutManager还有一件非常重要的事情，就是回收了，我们在layout之后，还要把一些不再需要的Items回收，以保证滑动的流畅度；
+     */
     @Override
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {//这个方法显然是用于放置子view的位置，十分重要的一个方法
+        //getItemCount和getChildCount的区别：前者是adapter中添加的数据的数目，而后者是当前recyclerView中已经添加的子View的数目。
         if (getItemCount() == 0) {//没有Item，界面空着吧
             return;
         } else if (getChildCount() == 0 && state.isPreLayout()) {//state.isPreLayout()是支持动画的
             return;
         }
-        //在布局之前，将所有的子view先detach掉，放入到Scrap中
+        //在布局之前，将所有的子view先detach掉，放入到Scrap中   detach轻量回收View
         detachAndScrapAttachedViews(recycler);
         //detachView(view);//超级轻量回收一个View,马上就要添加回来
         //detachAndScrapView(view, recycler);//detach轻量回收指定View
@@ -85,12 +92,17 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
                 // Important！将ViewLayout出来，显示在屏幕上，布局到RecyclerView容器中，所有的计算都是为了得出任意position的item的边界来布局
                 layoutDecorated(scrap, frame.left - mHorizontalOffset, frame.top - mVerticalOffset,
                         frame.right - mHorizontalOffset, frame.bottom - mVerticalOffset);
+                /**
+                 * 将item　layout布局出来，显示在屏幕上，内部会自动追加上该View的ItemDecoration和Margin
+                 * 这里就需要自己去控制显示的位置了
+                 */
+                //layoutDecoratedWithMargins(scrap, 0, 0, 0, 0);
             }
         }
     }
 
     @Override
-    public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {//dy>0:向上滚动  dy<0:向下滚动
+    public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {//dy>0:向上滚动  dy<0:向下滚动  如果这个值小于传入的坐标，表明我们已经滑动到了尽头
         detachAndScrapAttachedViews(recycler);
         if (mVerticalOffset + dy < 0) {
             dy = -mVerticalOffset;
@@ -98,7 +110,7 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
             dy = mTotalHeight - getVerticalSpace() - mVerticalOffset;
         }
 
-        offsetChildrenVertical(-dy);
+        offsetChildrenVertical(-dy);//垂直移动RecyclerView内所有的item
         mVerticalOffset += dy;
         fill(recycler, state);
         return dy;
@@ -132,7 +144,7 @@ public class CardLayoutManager extends RecyclerView.LayoutManager {
     private int getHorizontalSpace() {
         return getWidth() - getPaddingLeft() - getPaddingRight();
     }
-
+    /**获取RecyclerView在垂直方向上的可用空间，即去除了padding后的高度*/
     private int getVerticalSpace() {
         return getHeight() - getPaddingTop() - getPaddingBottom();
     }

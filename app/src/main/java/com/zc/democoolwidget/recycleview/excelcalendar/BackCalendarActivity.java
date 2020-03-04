@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.zc.democoolwidget.R;
-import com.zc.democoolwidget.recycleview.lingxing.MainLingXingActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -373,10 +372,6 @@ public class BackCalendarActivity extends Activity implements SimpleAdapter.OnIt
             startDate = nowDate;
         }
         return DateUtils.getAfterDays(startDate, 30 * dayDirection);
-    }
-
-    public void startLingXing(View view) {
-        startActivity(new Intent(this, MainLingXingActivity.class));
     }
 
 }
