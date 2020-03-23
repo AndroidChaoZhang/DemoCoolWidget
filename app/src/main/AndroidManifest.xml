@@ -23,7 +23,6 @@
         <activity android:name="com.zc.democoolwidget.switchbutton.SwitchButtonActivity"/>
         <activity android:name="com.zc.democoolwidget.rippleview.RippleViewActivity"/>
         <activity android:name="com.zc.democoolwidget.calendarview.CalendarActivity"/>
-        <activity android:name="com.zc.democoolwidget.drawerlayout.DrawerLayoutActivity"/>
 
         <activity android:name="com.zc.democoolwidget.magicindicator.ExampleMainActivity"/>
         <activity android:name="com.zc.democoolwidget.magicindicator.ScrollableTabExampleActivity"/>
@@ -48,8 +47,9 @@
         <activity android:name="com.zc.democoolwidget.casetotal.WaterActivity"/>
         <activity android:name="com.zc.democoolwidget.casetotal.MainCaseTotalActivity"/>
         <activity android:name="com.zc.democoolwidget.casetotal.customer.CanvasViewActivity"  android:hardwareAccelerated="false"/>
+        <activity android:name="com.zc.democoolwidget.recycleview.RecycleMainActivity"/>
+        <activity android:name="com.zc.democoolwidget.recycleview.simple.SimpleLayoutActivity"/>
         <activity android:name="com.zc.democoolwidget.casetotal.loadingview.LoadingViewActivity"/>
-        <activity android:name="com.zc.democoolwidget.rxjava2.RxJava2Activity"/>
     </application>
 
 </manifest>

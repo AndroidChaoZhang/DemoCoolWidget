@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -33,7 +32,7 @@ public class SimpleLayoutActivity extends Activity {
             list.add(""+i);
         }
         RecyclerView recycler_view = findViewById(R.id.recycler_view);
-        recycler_view.setLayoutManager(new LinearLayoutManager(this));
+        recycler_view.setLayoutManager(new CustomLayoutManager());
         recycler_view.setAdapter(new MyAdapter(list));
     }
 
@@ -46,7 +45,6 @@ public class SimpleLayoutActivity extends Activity {
 
         @Override
         protected void convert(BaseViewHolder helper, String item) {
-            Log.e("MyLog","====="+"测试数据："+item);
             ((TextView)helper.getView(R.id.tv_msg_item)).setText("测试数据："+item);
         }
 
